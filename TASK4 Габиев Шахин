@@ -1,0 +1,290 @@
+Задание №1
+#include <iostream>
+#include <limits>
+
+int main() {
+    const int rows = 3;
+    const int cols = 4;
+    int array[rows][cols] = {
+        {3, 5, 6, 7},
+        {12, 1, 1, 1},
+        {0, 7, 12, 1}
+    };
+
+    int sum = 0;
+    int minElement = std::numeric_limits<int>::max();
+    int maxElement = std::numeric_limits<int>::min();
+    int totalElements = rows * cols;
+
+    for (int i = 0; i < rows; ++i) {
+        for (int j = 0; j < cols; ++j) {
+            sum += array[i][j];
+            if (array[i][j] < minElement) {
+                minElement = array[i][j];
+            }
+            if (array[i][j] > maxElement) {
+                maxElement = array[i][j];
+            }
+        }
+    }
+
+    double average = static_cast<double>(sum) / totalElements;
+
+    std::cout << "Сумма всех элементов: " << sum << std::endl;
+    std::cout << "Среднее арифметическое: " << average << std::endl;
+    std::cout << "Минимальный элемент: " << minElement << std::endl;
+    std::cout << "Максимальный элемент: " << maxElement << std::endl;
+
+    return 0;
+}
+
+Задание №2
+#include <iostream>
+#include <vector>
+
+int main() {
+    std::vector<std::vector<int>> array = {
+        {3, 5, 6, 7},
+        {12, 1, 1, 1},
+        {0, 7, 12, 1}
+    };
+
+    int rows = array.size();
+    int cols = array[0].size();
+    std::vector<int> rowSums(rows, 0);
+    std::vector<int> colSums(cols, 0);
+    int totalSum = 0;
+
+ 
+    for (int i = 0; i < rows; ++i) {
+        for (int j = 0; j < cols; ++j) {
+            rowSums[i] += array[i][j];
+            colSums[j] += array[i][j];
+            totalSum += array[i][j];
+        }
+    }
+
+   
+    for (int i = 0; i < rows; ++i) {
+        for (int j = 0; j < cols; ++j) {
+            std::cout << array[i][j] << " ";
+        }
+        std::cout << "| " << rowSums[i] << std::endl;
+    }
+
+    std::cout << "--------------------" << std::endl;
+
+    for (int j = 0; j < cols; ++j) {
+        std::cout << colSums[j] << " ";
+    }
+    std::cout << "| " << totalSum << std::endl;
+
+    return 0;
+}
+
+Задание №3
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+
+int main() {
+    const int rows = 5;
+    const int cols1 = 10;
+    const int cols2 = 5;
+    
+    int array1[rows][cols1];
+    int array2[rows][cols2];
+
+
+    std::srand(std::time(0));
+
+    for (int i = 0; i < rows; ++i) {
+        for (int j = 0; j < cols1; ++j) {
+            array1[i][j] = std::rand() % 51; 
+        }
+    }
+
+    for (int i = 0; i < rows; ++i) {
+        array2[i][0] = array1[i][0] + array1[i][1];
+        array2[i][1] = array1[i][2] + array1[i][3];
+        array2[i][2] = array1[i][4] + array1[i][5];
+        array2[i][3] = array1[i][6] + array1[i][7];
+        array2[i][4] = array1[i][8] + array1[i][9];
+    }
+
+    std::cout << "Первый массив (5x10):" << std::endl;
+    for (int i = 0; i < rows; ++i) {
+        for (int j = 0; j < cols1; ++j) {
+            std::cout << array1[i][j] << " ";
+        }
+        std::cout << std::endl;
+    }
+
+    std::cout << "Второй массив (5x5):" << std::endl;
+    for (int i = 0; i < rows; ++i) {
+        for (int j = 0; j < cols2; ++j) {
+            std::cout << array2[i][j] << " ";
+        }
+        std::cout << std::endl;
+    }
+
+    return 0;
+}
+
+Задание №4
+#include <iostream>
+
+void insertionSort(int arr[], int size) {
+    for (int i = 1; i < size; ++i) {
+        int key = arr[i];
+        int j = i - 1;
+
+        while (j >= 0 && arr[j] > key) {
+            arr[j + 1] = arr[j];
+            j--;
+        }
+        arr[j + 1] = key;
+    }
+}
+
+void printArray(int arr[], int size) {
+    for (int i = 0; i < size; ++i) {
+        std::cout << arr[i] << " ";
+    }
+    std::cout << std::endl;
+}
+
+int main() {
+    int arr[] = {12, 11, 13, 5, 6};
+    int size = sizeof(arr) / sizeof(arr[0]);
+
+    std::cout << "Исходный массив: ";
+    printArray(arr, size);
+
+    insertionSort(arr, size);
+
+    std::cout << "Отсортированный массив: ";
+    printArray(arr, size);
+
+    return 0;
+}
+
+Задание №5
+#include <iostream>
+#include <vector>
+
+void displayGrades(const std::vector<int>& grades) {
+    std::cout << "Оценки студента: ";
+    for (int grade : grades) {
+        std::cout << grade << " ";
+    }
+    std::cout << std::endl;
+}
+
+void retakeExam(std::vector<int>& grades) {
+    int index, newGrade;
+    std::cout << "Введите номер оценки для пересдачи (0-9): ";
+    std::cin >> index;
+
+    if (index >= 0 && index < grades.size()) {
+        std::cout << "Введите новую оценку: ";
+        std::cin >> newGrade;
+        grades[index] = newGrade;
+        std::cout << "Оценка обновлена." << std::endl;
+    } else {
+        std::cout << "Некорректный номер оценки." << std::endl;
+    }
+}
+
+bool isScholarshipEligible(const std::vector<int>& grades) {
+    double sum = 0;
+    for (int grade : grades) {
+        sum += grade;
+    }
+    double average = sum / grades.size();
+    return average >= 4.5;
+}
+
+int main() {
+    std::vector<int> grades(10);
+    std::cout << "Введите 10 оценок студента:" << std::endl;
+    
+    for (int i = 0; i < 10; ++i) {
+        std::cout << "Оценка " << (i + 1) << ": ";
+        std::cin >> grades[i];
+    }
+
+    int choice;
+    do {
+        std::cout << "\nМеню:\n1. Вывод оценок\n2. Пересдача экзамена\n3. Проверка на стипендию\n4. Выход\nВведите ваш выбор: ";
+        std::cin >> choice;
+
+        switch (choice) {
+            case 1:
+                displayGrades(grades);
+                break;
+            case 2:
+                retakeExam(grades);
+                break;
+            case 3:
+                if (isScholarshipEligible(grades)) {
+                    std::cout << "Студент имеет право на стипендию." << std::endl;
+                } else {
+                    std::cout << "Студент не имеет права на стипендию." << std::endl;
+                }
+                break;
+            case 4:
+                std::cout << "Выход из программы." << std::endl;
+                break;
+            default:
+                std::cout << "Некорректный выбор. Попробуйте снова." << std::endl;
+        }
+    } while (choice != 4);
+
+    return 0;
+}
+
+Задание №6
+#include <iostream>
+
+void quickSort(int arr[], int low, int high) {
+    if (low < high) {
+        int pivot = arr[high]; 
+        int i = (low - 1); 
+
+        for (int j = low; j < high; j++) {
+            if (arr[j] <= pivot) {
+                i++;
+                std::swap(arr[i], arr[j]); 
+            }
+        }
+        std::swap(arr[i + 1], arr[high]); 
+        int partitionIndex = i + 1;
+
+        quickSort(arr, low, partitionIndex - 1);
+        quickSort(arr, partitionIndex + 1, high);
+    }
+}
+
+void printArray(int arr[], int size) {
+    for (int i = 0; i < size; i++) {
+        std::cout << arr[i] << " ";
+    }
+    std::cout << std::endl;
+}
+
+int main() {
+    int arr[] = {10, 7, 8, 9, 1, 5};
+    int size = sizeof(arr) / sizeof(arr[0]);
+
+    std::cout << "Исходный массив: ";
+    printArray(arr, size);
+
+    quickSort(arr, 0, size - 1);
+
+    std::cout << "Отсортированный массив: ";
+    printArray(arr, size);
+
+    return 0;
+}
+
