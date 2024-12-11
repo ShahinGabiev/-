@@ -1,0 +1,148 @@
+Зададние №1
+#include <iostream>
+#include <vector>
+#include <unordered_set>
+
+std::vector<int> uniqueElements(const std::vector<int>& arr) {
+  std::unordered_set<int> seen;
+  std::vector<int> result;
+  for (int item : arr) {
+    if (seen.find(item) == seen.end()) {
+      seen.insert(item);
+      result.push_back(item);
+    }
+  }
+  return result;
+}
+
+int main() {
+  std::vector<int> myArray = {1, 2, 2, 3, 4, 4, 5, 1};
+  std::vector<int> uniqueArray = uniqueElements(myArray);
+  for (int item : uniqueArray) {
+    std::cout << item << " ";
+  }
+  std::cout << std::endl; 
+  return 0;
+}
+Зададние №2
+#include <iostream>
+#include <vector>
+
+std::vector<int> mergeSortedArrays(const std::vector<int>& arr1, const std::vector<int>& arr2) {
+  std::vector<int> merged;
+  int i = 0, j = 0;
+  while (i < arr1.size() && j < arr2.size()) {
+    if (arr1[i] < arr2[j]) {
+      merged.push_back(arr1[i]);
+      i++;
+    } else {
+      merged.push_back(arr2[j]);
+      j++;
+    }
+  }
+  while (i < arr1.size()) {
+    merged.push_back(arr1[i++]);
+  }
+  while (j < arr2.size()) {
+    merged.push_back(arr2[j++]);
+  }
+  return merged;
+}
+
+int main() {
+  std::vector<int> arr1 = {2, 5, 8, 12};
+  std::vector<int> arr2 = {1, 3, 6, 9, 11};
+  std::vector<int> mergedArray = mergeSortedArrays(arr1, arr2);
+  for (int x : mergedArray) std::cout << x << " ";
+  std::cout << std::endl; 
+  return 0;
+}
+Задание №3
+#include <iostream>
+#include <vector>
+#include <limits>
+
+std::pair<int, std::vector<int>> maxSubarraySumSlow(const std::vector<int>& arr) {
+    int maxSum = std::numeric_limits<int>::min();
+    int startIndex = 0;
+    int endIndex = 0;
+    std::vector<int> maxSubarray;
+
+    for (int i = 0; i < arr.size(); ++i) {
+        int currentSum = 0;
+        for (int j = i; j < arr.size(); ++j) {
+            currentSum += arr[j];
+            if (currentSum > maxSum) {
+                maxSum = currentSum;
+                startIndex = i;
+                endIndex = j;
+            }
+        }
+    }
+    if (startIndex <= endIndex) {
+        maxSubarray.assign(arr.begin() + startIndex, arr.begin() + endIndex + 1);
+    }
+    return std::make_pair(maxSum, maxSubarray);
+}
+
+int main() {
+    std::vector<int> arr = {-2, 1, -3, 4, -1, 2, 1, -5, 4};
+    auto result = maxSubarraySumSlow(arr);
+    std::cout << "Максимальная сумма (медленный метод): " << result.first << std::endl; 
+    std::cout << "Подмассив: ";
+    for (int x : result.second) std::cout << x << " ";
+    std::cout << std::endl; 
+    return 0;
+}
+Задание №4
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+void rearrangeArray(std::vector<int>& arr) {
+    int left = 0;
+    int right = arr.size() - 1;
+
+    while (left < right) {
+        while (left < right && arr[left] % 2 == 0) {
+            left++;
+        }
+        while (left < right && arr[right] % 2 != 0) {
+            right--;
+        }
+        if (left < right) {
+            std::swap(arr[left], arr[right]);
+            left++;
+            right--;
+        }
+    }
+}
+
+
+int main() {
+    std::vector<int> arr = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+    rearrangeArray(arr);
+    std::cout << "Переставленный массив: ";
+    for (int x : arr) {
+        std::cout << x << " ";
+    }
+    std::cout << std::endl; 
+
+    std::vector<int> arr2 = {1,3,5,7,9,2,4,6,8};
+    rearrangeArray(arr2);
+    std::cout << "Переставленный массив 2: ";
+    for (int x : arr2) {
+        std::cout << x << " ";
+    }
+    std::cout << std::endl;
+
+    std::vector<int> arr3 = {};
+    rearrangeArray(arr3);
+    std::cout << "Переставленный массив 3: ";
+    for (int x : arr3) {
+        std::cout << x << " ";
+    }
+    std::cout << std::endl;
+
+    return 0;
+}
