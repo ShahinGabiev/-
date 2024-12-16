@@ -1,0 +1,159 @@
+Задание №1
+#include <iostream>
+#include <stdexcept>
+#include <limits> 
+
+double calculate_resistance(double R1, double R2, double R3) {
+ 
+  if (R1 == 0 || R2 == 0 || R3 == 0) {
+    throw std::invalid_argument("Ошибка: одно или несколько сопротивлений равны нулю.");
+  }
+
+  double R0 = 1.0 / (1.0/R1 + 1.0/R2 + 1.0/R3);
+  return R0;
+}
+
+int main() {
+  double R1 = 10.0;
+  double R2 = 20.0;
+  double R3 = 30.0;
+  double R0;
+
+  try {
+    R0 = calculate_resistance(R1, R2, R3);
+    std::cout << "Общее сопротивление R0: " << R0 << std::endl;
+  } catch (const std::invalid_argument& e) {
+    std::cerr << "Ошибка: " << e.what() << std::endl;
+  } catch (const std::exception& e) { 
+      std::cerr << "Неизвестная ошибка: " << e.what() << std::endl;
+  }
+
+  try {
+    R0 = calculate_resistance(10, 0, 30);
+    std::cout << "Общее сопротивление R0: " << R0 << std::endl;
+  } catch (const std::invalid_argument& e) {
+    std::cerr << "Ошибка: " << e.what() << std::endl;
+  }
+
+
+  return 0;
+}
+Задание №2
+#include <iostream>
+#include <cmath>
+#include <stdexcept>
+
+double calculate_circle_area(double L) {
+  if (L <= 0) {
+    throw std::invalid_argument("Ошибка: длина окружности должна быть больше нуля.");
+  }
+  double R = L / (2 * M_PI);
+  return M_PI * pow(R, 2); 
+}
+
+int main() {
+  double L = 10.0;
+  double S;
+
+  try {
+    S = calculate_circle_area(L);
+    std::cout << "Площадь круга: " << S << std::endl;
+
+    S = calculate_circle_area(0.0);
+    std::cout << "Площадь круга: " << S << std::endl;
+  } catch (const std::invalid_argument& e) {
+    std::cerr << "Ошибка: " << e.what() << std::endl;
+  } catch (const std::exception& e) {
+      std::cerr << "Неизвестная ошибка: " << e.what() << std::endl;
+  }
+
+  return 0;
+}
+Задание №3
+#include <iostream>
+
+double calculate_distance(double v, double t, double a) {
+  return v * t + (a * t * t) / 2.0; 
+}
+
+int main() {
+  double v = 10.0; 
+  double t = 5.0; 
+  double a = 2.0; 
+  double S = calculate_distance(v, t, a);
+  std::cout << "Пройденное расстояние: " << S << std::endl;
+  return 0;
+}
+Задание №4
+#include <iostream>
+
+using namespace std;
+
+int main() {
+  long long seconds; 
+
+  cout << "Введите время в секундах: ";
+  cin >> seconds;
+
+  if (cin.fail()) { 
+    cerr << "Ошибка: Некорректный ввод." << endl;
+    return 1;
+  }
+
+  long long hours = seconds / 3600;
+  long long minutes = (seconds % 3600) / 60;
+  long long remaining_seconds = seconds % 60;
+
+  cout << "Время: " << hours << " ч " << minutes << " мин " << remaining_seconds << " сек" << endl;
+
+  return 0;
+}
+Задание №5
+#include <iostream>
+#include <iomanip> 
+#include <cmath>   
+
+
+using namespace std;
+
+int main() {
+  double number;
+
+  cout << "Введите дробное число: ";
+  cin >> number;
+
+  if (cin.fail()) {
+    cerr << "Ошибка: Некорректный ввод." << endl;
+    return 1;
+  }
+
+  int dollars = static_cast<int>(number); 
+  int cents = static_cast<int>(round((number - dollars) * 100));
+
+  cout << dollars << " долларов и " << cents << " центов" << endl;
+
+  return 0;
+}
+Задание №6
+#include <iostream>
+
+using namespace std;
+
+int main() {
+  int days;
+
+  cout << "Введите количество дней: ";
+  cin >> days;
+
+  if (cin.fail() || days < 0) { 
+    cerr << "Ошибка: Некорректный ввод. Количество дней должно быть неотрицательным числом." << endl;
+    return 1;
+  }
+
+  int weeks = days / 7;
+  int remaining_days = days % 7;
+
+  cout << weeks << " недель и " << remaining_days << " дней" << endl;
+
+  return 0;
+}
