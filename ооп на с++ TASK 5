@@ -1,0 +1,347 @@
+Ответы на вопросы:
+1. Что такое наследование в C++ и как оно способствует повторному использованию кода?
+Наследование — это фундаментальный механизм объектно-ориентированного программирования (ООП), который позволяет создавать новые классы (производные классы) на основе существующих (базовые классы). Производный класс наследует свойства (данные-члены) и поведение (методы) базового класса, добавляя или изменяя их по мере необходимости. Это способствует повторному использованию кода, поскольку вам не нужно переписывать уже существующую функциональность базового класса в производном. Вы просто расширяете ее.
+Пример:
+class Animal { // Базовый класс
+public:
+    void eat() { std::cout << "Animal is eating" << std::endl; }
+};
+
+class Dog : public Animal { // Производный класс
+public:
+    void bark() { std::cout << "Dog is barking" << std::endl; }
+};
+
+int main() {
+    Dog myDog;
+    myDog.eat(); // Унаследовано от Animal
+    myDog.bark(); // Специфично для Dog
+    return 0;
+}
+
+2. Какие модификаторы наследования существуют в C++ и как они влияют на доступ к членам базового класса?
+В C++ существуют три модификатора доступа при наследовании:
+
+public: Публичные члены базового класса остаются публичными в производном классе, защищенные — защищенными.
+protected: Публичные и защищенные члены базового класса становятся защищенными в производном классе.
+private: Все члены базового класса (публичные, защищенные и приватные) становятся приватными в производном классе. Это наиболее ограничивающий модификатор.
+
+3. В чём разница между перегрузкой (overloading) и переопределением (overriding) методов? Приведите примеры.
+
+Перегрузка (overloading): Определение нескольких методов с одним и тем же именем, но разными параметрами (по типу или количеству) в одном и том же классе. Компилятор выбирает нужную версию метода на основе переданных аргументов.
+
+class Calculator {
+public:
+    int add(int a, int b) { return a + b; }
+    double add(double a, double b) { return a + b; }
+};
+
+
+Переопределение (overriding): Изменение реализации метода базового класса в производном классе. Метод в производном классе должен иметь то же имя, тип возвращаемого значения и параметры, что и метод в базовом классе. Для корректного переопределения метод в базовом классе должен быть объявлен как virtual.
+
+class Animal {
+public:
+    virtual void makeSound() { std::cout << "Generic animal sound" << std::endl; }
+};
+
+class Dog : public Animal {
+public:
+    void makeSound() override { std::cout << "Woof!" << std::endl; }
+};
+
+4. Почему множественное наследование может приводить к проблемам, таким как "ромбовидное наследование", и как это решается?
+Ромбовидное наследование возникает, когда класс наследуется от двух классов, которые в свою очередь наследуются от одного общего базового класса. Это может привести к неоднозначности: какую версию члена базового класса использовать?
+    A
+   / \
+  B   C
+   \ /
+    D
+
+Решение: Использование виртуального наследования. Ключевое слово virtual перед объявлением наследования в классах B и C указывает, что они хотят использовать одну общую копию класса A.
+class A { /* ... */ };
+class B : virtual public A { /* ... */ };
+class C : virtual public A { /* ... */ };
+class D : public B, public C { /* ... */ };
+
+5. Что такое абстрактный класс? В каких случаях его использование оправдано? Приведите пример.
+Абстрактный класс — это класс, который содержит хотя бы один чисто виртуальный метод. Чисто виртуальный метод объявляется с = 0 в конце. Абстрактные классы нельзя инстанцировать (создавать объекты). Они служат в качестве интерфейса, определяющего общий функционал для производных классов.
+Пример:
+class Shape { // Абстрактный класс
+public:
+    virtual void draw() = 0; // Чисто виртуальный метод
+    virtual double getArea() = 0;
+};
+
+class Circle : public Shape {
+public:
+    void draw() override { /* ... */ }
+    double getArea() override { /* ... */ }
+};
+
+Использование абстрактных классов оправдано:
+
+Когда нужно определить общий интерфейс для группы классов.
+Когда нужно предотвратить создание объектов базового класса.
+Когда нужно обеспечить, чтобы производные классы реализовывали определенный функционал.
+
+Практическая работа:
+1.
+#include <iostream>
+#include <string>
+
+class Employee {
+protected:
+    std::string name;
+    double salary;
+
+public:
+    Employee(const std::string& name, double salary) : name(name), salary(salary) {}
+
+    virtual void printInfo() {
+        std::cout << "Employee: " << name << ", Salary: " << salary << std::endl;
+    }
+
+    virtual ~Employee() {}
+};
+
+class Manager : public Employee {
+private:
+    double bonus;
+
+public:
+    Manager(const std::string& name, double salary, double bonus) : Employee(name, salary), bonus(bonus) {}
+
+ void printInfo() override {
+        std::cout << "Manager: " << name << ", Salary: " << salary << ", Bonus: " << bonus << ", Total: " << salary + bonus << std::endl;
+    }
+};
+
+int main() {
+    Employee* emp1 = new Employee("John Doe", 50000);
+    Employee* emp2 = new Manager("Jane Smith", 60000, 10000);
+
+    emp1->printInfo(); 
+    emp2->printInfo();
+    delete emp1;
+    delete emp2; 
+
+
+
+    Employee* employees[2];
+    employees[0] = new Employee{"Alice", 55000};
+    employees[1] = new Manager{"Bob", 70000, 15000};
+
+    for (int i = 0; i < 2; ++i) {
+        employees[i]->printInfo();
+    }
+
+
+    for (int i = 0; i < 2; ++i) {
+      delete employees[i];
+    }
+
+
+    return 0;
+}
+2.
+#include <iostream>
+#include <string>
+
+class Person {
+protected:
+    std::string name;
+    int age;
+public:
+    Person(const std::string& name, int age) : name(name), age(age) {}
+    virtual void printInfo() {
+        std::cout << "Name: " << name << ", Age: " << age << std::endl;
+    }
+    virtual ~Person() {} 
+};
+
+class Student : virtual public Person {
+protected:
+    std::string university;
+public:
+    Student(const std::string& name, int age, const std::string& university)
+        : Person(name, age), university(university) {}
+    void printInfo() override {
+        Person::printInfo();
+        std::cout << "University: " << university << std::endl;
+    }
+};
+
+class Worker : virtual public Person {
+protected:
+    std::string company;
+public:
+    Worker(const std::string& name, int age, const std::string& company)
+        : Person(name, age), company(company) {}
+
+    void printInfo() override {
+        Person::printInfo();
+        std::cout << "Company: " << company << std::endl;
+    }
+};
+
+
+class Intern : public Student, public Worker {
+public:
+    Intern(const std::string& name, int age, const std::string& university, const std::string& company)
+        : Person(name, age), Student(name, age, university), Worker(name, age, company) {}
+
+
+    void printInfo() override {
+        Person::printInfo();
+        std::cout << "University: " << university << std::endl;
+        std::cout << "Company: " << company << std::endl;
+    }
+
+};
+
+int main() {
+    Person person("Base Person", 30);
+    Student student("Student Person", 20, "University A");
+    Worker worker("Worker Person", 40, "Company B");
+    Intern intern("Intern Person", 22, "University C", "Company D");
+
+    person.printInfo();
+    student.printInfo();
+    worker.printInfo();
+    intern.printInfo();
+
+
+    Person* people[4];
+    people[0] = &person;
+    people[1] = &student;
+    people[2] = &worker;
+    people[3] = &intern;
+
+
+     std::cout << "\nUsing array of Person pointers:\n";
+    for (int i = 0; i < 4; ++i) {
+        people[i]->printInfo();
+        std::cout << std::endl;
+    }
+
+
+    return 0;
+}
+
+Домашняя работа:
+1.
+#include <iostream>
+#include <string>
+
+class GameCharacter {
+protected:
+    int health;
+public:
+    GameCharacter(int health) : health(health) {}
+
+    virtual void displayInfo() {
+        std::cout << "Health: " << health << std::endl;
+    }
+    virtual ~GameCharacter(){}
+};
+
+class Warrior : virtual public GameCharacter {
+protected:
+    int attack;
+public:
+    Warrior(int health, int attack) : GameCharacter(health), attack(attack) {}
+
+    virtual void displayInfo() override {
+        GameCharacter::displayInfo();
+        std::cout << "Attack: " << attack << std::endl;
+    }
+
+     virtual ~Warrior(){}
+};
+
+class Mage : virtual public GameCharacter {
+protected:
+    int mana;
+public:
+    Mage(int health, int mana) : GameCharacter(health), mana(mana) {}
+    virtual void displayInfo() override {
+        GameCharacter::displayInfo();
+        std::cout << "Mana: " << mana << std::endl;
+    }
+     virtual ~Mage(){}
+};
+
+class BattleMage : public Warrior, public Mage {
+public:
+    BattleMage(int health, int attack, int mana) : GameCharacter(health), Warrior(health, attack), Mage(health, mana) {}
+
+    void displayInfo() override {
+        GameCharacter::displayInfo(); 
+        std::cout << "Mana: " << mana << std::endl;
+        std::cout << "Attack: " << attack << std::endl;
+    }
+};
+
+int main() {
+    BattleMage bm(100, 50, 200);
+    bm.displayInfo(); 
+
+    return 0;
+}
+2.
+#include <iostream>
+#include <string>
+
+class Character {
+protected:
+    std::string name;
+
+public:
+    Character(const std::string& name) : name(name) {}
+
+    virtual void introduce() {
+        std::cout << "I am " << name << "." << std::endl;
+    }
+    virtual ~Character() {}
+};
+
+class Hero : virtual public Character {
+public:
+    Hero(const std::string& name) : Character(name) {}
+
+    virtual void introduce() override {
+        Character::introduce();
+        std::cout << "I am a hero." << std::endl;
+    }
+     virtual ~Hero() {}
+};
+
+class Villain : virtual public Character {
+public:
+
+    Villain(const std::string& name) : Character(name) {}
+
+    virtual void introduce() override {
+        Character::introduce();
+        std::cout << "I am a villain." << std::endl;
+    }
+      virtual ~Villain() {}
+};
+
+class AntiHero : public Hero, public Villain {
+public:
+    AntiHero(const std::string& name) : Character(name), Hero(name), Villain(name) {}
+
+    void introduce() override {
+        Character::introduce();
+        std::cout << "I am both a hero and a villain. I do what I want!" << std::endl;
+    }
+};
+
+int main() {
+    AntiHero deadpool("Deadpool");
+    deadpool.introduce();
+    
+
+    return 0;
+}
